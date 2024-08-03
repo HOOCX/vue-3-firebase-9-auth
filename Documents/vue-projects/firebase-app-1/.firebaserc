@@ -1,0 +1,9 @@
+{
+  "projects": {
+    "default": "vue-3-2024-3f4c6",
+    "vue-firebase": "vue-3-2024-3f4c6"
+  },
+  "targets": {},
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
+}
