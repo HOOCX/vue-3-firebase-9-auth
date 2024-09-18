@@ -9,7 +9,8 @@ import router from '../router';
  export const useDatabaseStore = defineStore('database', {
     state: () => ({
         document: [],
-        loadingDocument: false
+        loadingDocument: false,
+        loadingDocumentState: false,
     }),
     actions: {
         async getUrls(){ 
@@ -36,6 +37,7 @@ import router from '../router';
             }
         },
         async addUrl(name){
+            this.loadingDocumentState = true;
             try {
                 const objetoDoc = {
                     name: name,
@@ -50,8 +52,9 @@ import router from '../router';
                 })
             } catch (error) {
                 console.log(error);
+                return error.code
             } finally {
-
+                this.loadingDocumentState = false;
             }
         },
         async leerUrl(id){
@@ -71,6 +74,7 @@ import router from '../router';
             }
         },
         async updateUrl(id, name){
+            this.loadingDocumentState = true;
             try {
                 const docRef = doc(db, 'urls', id);
                 const docSnap = await getDoc(docRef)
@@ -85,9 +89,13 @@ import router from '../router';
                 router.push('/')
             } catch (error) {
                 console.log(error.message);
+                return error.message;
+            } finally {
+                this.loadingDocumentState = false;
             }
         },
         async deleteUrl(id){
+            this.loadingDocumentState = true;
             try {
                 const docRef = doc(db, 'urls', id);
                 const docSnap = await getDoc(docRef)
@@ -100,9 +108,10 @@ import router from '../router';
                 await deleteDoc(docRef)
                 this.document = this.document.filter(item => item.id !== id)
             } catch (error) {
-                console.log(error.message)
+                //console.log(error.code)
+                return error.message
             } finally{
-
+                this.loadingDocumentState = false
             }
         }
     }
