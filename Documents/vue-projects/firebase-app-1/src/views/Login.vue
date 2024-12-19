@@ -50,7 +50,7 @@ const formstate = reactive({
 
 
 const onFinish = async(values) => {
-    console.log('Success', values);
+    //console.log('Success', values);
     const errorRes = await userStore.loginUser(formstate.email, formstate.password)
 
     if (!errorRes) {
