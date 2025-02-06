@@ -28,6 +28,7 @@
             <a-button type="primary" @click="router.push(`/editar/${item.id}`)"
               >Editar</a-button
             >
+            <a-button @click="copiarPortapapeles(item.id)">Copiar</a-button>
           </a-space>
         </template>
 
@@ -59,5 +60,23 @@ const confirm = async(id) => {
 
 const cancel = () => {
     message.error('No se elimino')
+}
+
+const copiarPortapapeles = (id) => {
+    // navigator.clipboard.writeText(databaseStore.document.find(item => item.id === id)?.url)
+    // message.success('URL copiada al portapapeles')
+    if (!navigator.clipboard) {
+      return  message.error('No se copio')
+      
+    }
+
+    const path = `${window.location.origin}/${id}`;
+    console.log(path);
+    navigator.clipboard.writeText(path).then(() => {
+      message.success('URL copiada al portapapeles')
+    }).catch((err) => {
+      message.error('No se pudo copiar')
+      console.error('Error al copiar al portapapeles: ', err);
+    })
 }
 </script>

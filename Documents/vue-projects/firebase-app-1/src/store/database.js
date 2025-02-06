@@ -1,5 +1,5 @@
 
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from 'firebase/firestore';
 import { defineStore } from 'pinia'
 import { auth, db } from '../firebaseConfig'
 import {nanoid} from 'nanoid';
@@ -13,6 +13,21 @@ import router from '../router';
         loadingDocumentState: false,
     }),
     actions: {
+        async getURL(id) {
+            try {
+                const docRef = doc(db, 'urls', id);
+                const docSnap = await getDoc(docRef);
+                if (!docSnap.exists()) {
+                    return false;
+                }
+
+                return docSnap.data().name
+            } catch (error) {
+                console.log(error);
+            } finally {
+
+            }
+        },
         async getUrls(){ 
             if (this.document.length !== 0) {
                 return;
@@ -44,11 +59,11 @@ import router from '../router';
                     short: nanoid(6),
                     user: auth.currentUser.uid, 
                 }
-                const docRef = await addDoc(collection(db, 'urls'), objetoDoc);
+                await setDoc(doc(db, 'urls', objetoDoc.short), objetoDoc);
                 //console.log(docRef.id)
                 this.document.push({
                     ...objetoDoc,
-                    id: docRef.id,
+                    id: objetoDoc.short,
                 })
             } catch (error) {
                 console.log(error);

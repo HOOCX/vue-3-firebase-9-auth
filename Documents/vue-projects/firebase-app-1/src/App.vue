@@ -33,7 +33,7 @@
         <div v-if="userStore.loadingSession">
           loading user...
         </div>
-        <router-view></router-view>
+        <router-view v-else></router-view>
       </div>
 
     </a-layout-content>
